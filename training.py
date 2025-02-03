@@ -11,12 +11,12 @@ from sklearn.metrics import f1_score
 from sklearn.model_selection import train_test_split
 
 # Load the configuration file
-with open("/content/drive/MyDrive/Projet Urchadee/Cross encoder : multilabel classification/config.yaml", "r") as file:
+with open("\config.yaml", "r") as file:
     config = yaml.safe_load(file)
 
 # Access parameters
 train_data_path = config["data"]["data_path"]
-model_name = "microsoft/deberta-v3-xsmall"#config["model"]["name"]
+model_name = config["model"]["name"]
 max_num_labels = config["model"]["max_num_labels"]
 learning_rate = float(config["training"]["learning_rate"])
 batch_size = config["training"]["batch_size"]
@@ -30,7 +30,6 @@ tokenizer = AutoTokenizer.from_pretrained(model_name)
 #Custom collate function
 def custom_collate_fn(batch):
     # Separate texts and labels from the batch
-    # Faire le padding ici
     input_ids = [item["input_ids"] for item in batch]
     attention_mask = [item["attention_mask" ] for item in batch]
     cls_position = [item["cls_position"] for item in batch]
@@ -74,18 +73,7 @@ def evaluate(model, dataloader, device):
 if __name__ == "__main__":
 
     model = CrossEncoderModel(model_name, max_num_labels).to(device)
-
-    # #Freeze base model parameters
-    # for param in model.parameters():
-    #   param.requires_grad = False
-
-    # Unfreeze the pooler layer to have a better representation for our classification task
-    # for param in model.shared_encoder.pooler.parameters():
-    #   param.requires_grad = True
-
-    criterion = nn.BCEWithLogitsLoss(reduction='none') # multiclass classification
-
-    #trainable_params = filter(lambda p: p.requires_grad, model.parameters())
+    criterion = nn.BCEWithLogitsLoss(reduction='none') # multiclass classification, reduction to none due to padding
     optimizer = AdamW(model.parameters(), lr=learning_rate)
 
     
@@ -93,18 +81,17 @@ if __name__ == "__main__":
     with open(train_data_path, 'r', encoding='utf-8') as f:
       train_data = json.load(f)
 
-    # Split des données (80% train, 20% test)
+    # Split train and validation
     train_set, validation_set = train_test_split(train_data, test_size=0.1, random_state=42, shuffle=True)
 
-
-    # Training loop
+    # Datasets
     train_dataset = CustomDataset(train_set, model_name, max_num_labels)
-    # Training loop
     validation_dataset = CustomDataset(validation_set, model_name, max_num_labels)
 
     # Dataloader
     train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, collate_fn=custom_collate_fn)
     validation_loader = DataLoader(validation_dataset, batch_size=batch_size, shuffle=True, collate_fn=custom_collate_fn)
+
     validation_scores = []
     loss_scores = []
     for epoch in range(epochs):
@@ -118,17 +105,18 @@ if __name__ == "__main__":
 
             #Forward pass
             optimizer.zero_grad()
+
             # scores : [batch_size, max_num_labels]
             # mask : [batch_size, max_num_labels]
             scores, mask = model.forward(inputs, device)
 
             # Compute the loss
             loss = criterion(scores, target_labels)
-            #multiplier par mask
+
+            # Mask
             loss = (loss * mask).sum()
 
             # Backward pass and update weights
-            #loss.requires_grad = True # necessary if a part of the architecture is freezed
             loss.backward()
             optimizer.step()
 
@@ -140,7 +128,7 @@ if __name__ == "__main__":
         
           
         ## Evaluation
-        f1 = evaluate(model, validation_loader, device) #f1_score(all_targets, all_preds, average="micro")
+        f1 = evaluate(model, validation_loader, device) 
         print(f"Epoch [{epoch + 1}/{epochs}] Evaluation F1 Score: {f1:.4f}")
         loss_scores.append(running_loss / (batch_idx + 1))
         validation_scores.append(f1)
