@@ -74,5 +74,17 @@ This model can be used in
 
 Synthetic data generated with gpt4-mini and gemini 
 
+#### Training results
+
+###### Bert base
+
+![alt text](<training results/bert_base_f1_score.png>)
+![alt text](<training results/bert_base_loss.png>)
+
+###### Roberta
+
+![alt text](<training results/validation_score_given_epochs.png>)
+![alt text](<training results/loss_given_epochs.png>)
+
 ## Author 🧑‍💻
 - [Salim ABDOU DAOURA](https://github.com/sabdoudaoura)
