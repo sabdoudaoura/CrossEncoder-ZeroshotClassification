@@ -79,7 +79,5 @@ Synthetic data generated with gpt4-mini and gemini
 Training was conducted using two encoders: BERT base and RoBERTa.
 Results are available in \training results
 
-###### Roberta
-
 ## Author 🧑‍💻
 - [Salim ABDOU DAOURA](https://github.com/sabdoudaoura)
