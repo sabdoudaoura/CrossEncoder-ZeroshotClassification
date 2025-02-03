@@ -78,11 +78,8 @@ Synthetic data generated with gpt4-mini and gemini
 
 ###### Bert base
 
-![alt text](<training results/bert_base_accuracy.png>)
-![alt text](<training results/bert_base_precision.png>)
-
-![alt text](<training results/bert_base_f1_score.png>)
-![alt text](<training results/bert_base_loss.png>)
+![alt text](<C:\Users\Salim\Documents\VIEPROFESSIONNELLE\Phase2Jeuneettechnique\Portfolio\CrossEncoderZeroShotClassifcation\training results\bert_base_f1_score.png>)
+![alt text](<C:\Users\Salim\Documents\VIEPROFESSIONNELLE\Phase2Jeuneettechnique\Portfolio\CrossEncoderZeroShotClassifcation\training results\bert_base_f1_score.png>)
 
 ###### Roberta
 
