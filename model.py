@@ -1,7 +1,6 @@
 import torch
 import torch.nn as nn
 from transformers import AutoModel, AutoTokenizer
-from torch.nn.utils.rnn import pad_sequence
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -43,7 +42,7 @@ class CrossEncoderModel(nn.Module):
         return input_ids, attention_mask, label_cls_positions
 
     def forward(self, inputs, device = device):
-        """**Forward pass**
+        """Forward pass
 
         Args:
             inputs (dict[torch.Tensor]): A dictionnary with 3 tensors
