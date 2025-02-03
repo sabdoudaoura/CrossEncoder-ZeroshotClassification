@@ -1,13 +1,14 @@
 model:
-  name: "bert-base-uncased"
-  max_num_labels: 6
+  name: "microsoft/deberta-v3-xsmall"
+  max_num_labels: 10
 
 training:
   num_steps: 1000 
   batch_size: 32
   learning_rate: 2e-5
   optimizer: "adamw"
-  epochs : 60
+  epochs : 50
 
 data:
-  synthetic_data_path: "/content/drive/MyDrive/projet classification model*/data/synthetic_data.json"
+  data_path: "/content/drive/MyDrive/Projet Urchadee/Cross encoder : multilabel classification/data/data.json"
+  
