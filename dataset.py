@@ -6,8 +6,7 @@ from transformers import AutoTokenizer
 
 class CustomDataset(Dataset):
     def __init__(self, data, model_name, max_num_labels=6, transform=None, max_num_negatives=5):
-        """_summary_
-        Initializes the CustomDataset object.
+        """Initializes the CustomDataset object.
 
         Args:
             data (list): List of dictionaries containing the data. Each dictionary should have the keys "text" and "labels".

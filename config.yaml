@@ -10,5 +10,5 @@ training:
   epochs : 50
 
 data:
-  data_path: "/content/drive/MyDrive/Projet Urchadee/Cross encoder : multilabel classification/data/data.json"
+  data_path: "/data/data.json"
   
